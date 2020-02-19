@@ -24,9 +24,9 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        cameraTransform = Camera.main.transform;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        //cameraTransform = Camera.main.transform;
         rigidbody = GetComponent<Rigidbody>();
     }
 
@@ -34,10 +34,10 @@ public class PlayerController : MonoBehaviour
     {
 
         // Look rotation:
-        transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * mouseSensitivityX);
-        verticalLookRotation += Input.GetAxis("Mouse Y") * mouseSensitivityY;
-        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -60, 60);
-        cameraTransform.localEulerAngles = Vector3.left * verticalLookRotation;
+        //transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * mouseSensitivityX);
+        //verticalLookRotation += Input.GetAxis("Mouse Y") * mouseSensitivityY;
+        //verticalLookRotation = Mathf.Clamp(verticalLookRotation, -60, 60);
+        //cameraTransform.localEulerAngles = Vector3.left * verticalLookRotation;
 
         // Calculate movement:
         float inputX = Input.GetAxisRaw("Horizontal");
