@@ -284,7 +284,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7151926883187741643}
   m_Layer: 0
-  m_Name: King
+  m_Name: frnd 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -299,7 +299,7 @@ Transform:
   m_GameObject: {fileID: 7158378994030284417}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -1.2, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_Children:
   - {fileID: 7151744687316011651}
   - {fileID: 7160346798998689809}
