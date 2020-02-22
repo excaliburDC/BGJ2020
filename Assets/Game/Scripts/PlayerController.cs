@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed = 6;
     public float jumpForce = 220;
     public LayerMask groundedMask;
+    
 
     // System vars
     bool grounded;
@@ -39,37 +40,19 @@ public class PlayerController : MonoBehaviour
         //verticalLookRotation = Mathf.Clamp(verticalLookRotation, -60, 60);
         //cameraTransform.localEulerAngles = Vector3.left * verticalLookRotation;
 
-        // Calculate movement:
-        float inputX = Input.GetAxisRaw("Horizontal");
-        float inputY = Input.GetAxisRaw("Vertical");
-
-        Vector3 moveDir = new Vector3(inputX, 0, inputY).normalized;
-        Vector3 targetMoveAmount = moveDir * walkSpeed;
-        moveAmount = Vector3.SmoothDamp(moveAmount, targetMoveAmount, ref smoothMoveVelocity, .15f);
+        CalculateMovement();
 
         // Jump
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (grounded)
+            if (isGrounded())
             {
            
                 rigidbody.AddForce(transform.up * jumpForce,ForceMode.Impulse);
             }
         }
 
-        // Grounded check
-        Ray ray = new Ray(transform.position, -transform.up);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 1 + .1f, groundedMask))
-        {
-            Debug.DrawRay(transform.position, -transform.up);
-            grounded = true;
-        }
-        else
-        {
-            grounded = false;
-        }
+        
 
     }
 
@@ -78,5 +61,33 @@ public class PlayerController : MonoBehaviour
         // Apply movement to rigidbody
         Vector3 localMove = transform.TransformDirection(moveAmount) * Time.fixedDeltaTime;
         rigidbody.MovePosition(rigidbody.position + localMove);
+    }
+
+    void CalculateMovement()
+    {
+        // Calculate movement:
+        float inputX = Input.GetAxisRaw("Horizontal");
+        float inputY = Input.GetAxisRaw("Vertical");
+
+        Vector3 moveDir = new Vector3(inputX, 0, inputY).normalized;
+        Vector3 targetMoveAmount = moveDir * walkSpeed;
+        moveAmount = Vector3.SmoothDamp(moveAmount, targetMoveAmount, ref smoothMoveVelocity, .15f);
+    }
+
+    bool isGrounded()
+    {
+        // Grounded check
+        Ray ray = new Ray(transform.position, -transform.up);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 1 + .1f, groundedMask))
+        {
+            Debug.DrawRay(transform.position, -transform.up);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
