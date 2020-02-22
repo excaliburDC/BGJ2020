@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 220;
     public LayerMask groundedMask;
     public Animator cameraAnim;
+
+    public GameObject[] layers;
    
 
 
@@ -21,9 +23,12 @@ public class PlayerController : MonoBehaviour
     // System vars
     [SerializeField] bool grounded;
     [SerializeField] bool madeCrack;
+    [SerializeField] bool madeHole;
     Vector3 moveAmount;
     Vector3 smoothMoveVelocity;
     float verticalLookRotation;
+    int jumpCount = 0;
+    int currentLayer = 0;
     Transform cameraTransform;
     Rigidbody rigidbody;
 
@@ -55,10 +60,20 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-
+                jumpCount++;
                 rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-                madeCrack = true;
-                Invoke("MoveAgain", 1.5f);
+                if(jumpCount==1)
+                {
+                    madeCrack = true;
+                    Invoke("MoveAgain", 1.5f);
+                }
+                else if(jumpCount==2)
+                {
+                    madeHole = true;
+                    Invoke("MoveAgain", 1.5f);
+                    jumpCount = 0;
+                }
+              
               
 
 
@@ -119,7 +134,11 @@ public class PlayerController : MonoBehaviour
 
     void MoveAgain()
     {
-        madeCrack = false;
+        if(madeCrack)
+            madeCrack = false;
+
+        if (madeHole)
+            madeHole = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -131,6 +150,14 @@ public class PlayerController : MonoBehaviour
 
         }
 
-       
+       if(other.gameObject.tag=="Hole" && madeHole)
+       {
+            other.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            other.gameObject.GetComponent<Renderer>().material.color = Color.black;
+            cameraAnim.SetTrigger("CameraShake");
+            layers[currentLayer].gameObject.SetActive(false);
+            layers[++currentLayer].gameObject.SetActive(true);
+
+        }
     }
 }
