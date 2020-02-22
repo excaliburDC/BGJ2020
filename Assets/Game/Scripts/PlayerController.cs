@@ -7,15 +7,20 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // public vars
+   
     public float mouseSensitivityX = 1;
     public float mouseSensitivityY = 1;
     public float walkSpeed = 6;
     public float jumpForce = 220;
     public LayerMask groundedMask;
-    
+    public Animator cameraAnim;
+   
+
+
 
     // System vars
-    bool grounded;
+    [SerializeField] bool grounded;
+    [SerializeField] bool madeCrack;
     Vector3 moveAmount;
     Vector3 smoothMoveVelocity;
     float verticalLookRotation;
@@ -25,6 +30,7 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+  
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
         //cameraTransform = Camera.main.transform;
@@ -42,29 +48,46 @@ public class PlayerController : MonoBehaviour
 
         CalculateMovement();
 
+
         // Jump
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (isGrounded())
         {
-            if (isGrounded())
+
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-           
-                rigidbody.AddForce(transform.up * jumpForce,ForceMode.Impulse);
+
+                rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+                madeCrack = true;
+                Invoke("MoveAgain", 1.5f);
+              
+
+
             }
+
         }
 
+
+            
         
+
+
+
+
+
 
     }
 
     void FixedUpdate()
     {
         // Apply movement to rigidbody
+       
         Vector3 localMove = transform.TransformDirection(moveAmount) * Time.fixedDeltaTime;
         rigidbody.MovePosition(rigidbody.position + localMove);
     }
 
     void CalculateMovement()
     {
+        
         // Calculate movement:
         float inputX = Input.GetAxisRaw("Horizontal");
         float inputY = Input.GetAxisRaw("Vertical");
@@ -72,6 +95,7 @@ public class PlayerController : MonoBehaviour
         Vector3 moveDir = new Vector3(inputX, 0, inputY).normalized;
         Vector3 targetMoveAmount = moveDir * walkSpeed;
         moveAmount = Vector3.SmoothDamp(moveAmount, targetMoveAmount, ref smoothMoveVelocity, .15f);
+        
     }
 
     bool isGrounded()
@@ -83,11 +107,30 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 1 + .1f, groundedMask))
         {
             Debug.DrawRay(transform.position, -transform.up);
+            Debug.Log("Grounded");
             return true;
         }
         else
         {
+           
             return false;
         }
+    }
+
+    void MoveAgain()
+    {
+        madeCrack = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag=="Hole" && madeCrack)
+        {
+            other.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+            cameraAnim.SetTrigger("CameraShake");
+
+        }
+
+       
     }
 }

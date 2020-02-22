@@ -10,6 +10,7 @@ public class GravityAttractor : MonoBehaviour
 
     public void Attract(Rigidbody body)
     {
+        
         Vector3 targetDir = (body.position - transform.position).normalized;
         Vector3 bodyUp = body.transform.up;
 
@@ -17,5 +18,6 @@ public class GravityAttractor : MonoBehaviour
         body.AddForce(targetDir * gravity);
         // Allign bodies up axis with the centre of planet
         body.rotation = Quaternion.FromToRotation(bodyUp, targetDir) * body.rotation;
+       
     }
 }
