@@ -564,9 +564,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0d03d32f063ece4b8a79806dfa67773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monster1: {fileID: 0}
-  monster2: {fileID: 0}
-  monster3: {fileID: 0}
   AnimP: {fileID: 727593980}
   AnimK: {fileID: 1911261978}
   textDisplay: {fileID: 877205015}
