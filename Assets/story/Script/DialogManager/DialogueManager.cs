@@ -1,7 +1,9 @@
 ﻿using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using LitJson;
-
+using UnityEngine.SceneManagement;
 public class DialogueManager : MonoBehaviour
 {
    
@@ -35,7 +37,9 @@ public class DialogueManager : MonoBehaviour
             JsonData line = dialogue[index];
             if (line[0].ToString() == "EOD")
             {
+               
                 inDialogue = false;
+                SceneManager.LoadScene("Main");
                 textDisplay.text = "";
                 return false;
             }
@@ -52,15 +56,24 @@ public class DialogueManager : MonoBehaviour
     void Start()
     {
         LoadDialogue("Scene/Dialogue0");
+        InvokeRepeating("DialogueFlow", 1f, 5f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            PrintLine();
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    PrintLine();
+
+        //}
+        //InvokeRepeating("DialogueFlow",2f,f);
+    }
+    
+    public void DialogueFlow()
+    {
+        PrintLine();
+        //ield return new WaitForSeconds(0.5f);
     }
     private void DialogueTextColor()
     {
